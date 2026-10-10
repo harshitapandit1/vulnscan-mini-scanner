@@ -16,11 +16,16 @@ MIN_TIMEOUT, MAX_TIMEOUT = 0.3, 5.0
 # Only the dashboard (served by Live Server or this backend) may talk to the API.
 # Without this, ANY website open in your browser could trigger scans from your computer.
 ALLOWED_ORIGINS = {
-    "http://127.0.0.1:5500", "http://localhost:5500",     # VS Code Live Server (default port)
-    f"http://{HOST}:{PORT}", f"http://localhost:{PORT}",
+    "http://127.0.0.1:5500",
+    "http://localhost:5500",
+    "https://harshitapandit1.github.io",
 }
-ALLOWED_HOSTS = {f"{HOST}:{PORT}", f"localhost:{PORT}"}   # blocks DNS-rebinding tricks
 
+ALLOWED_HOSTS = {
+    f"{HOST}:{PORT}",
+    f"localhost:{PORT}",
+    "127.0.0.1:5000",
+}
 WEB_TIMEOUT = 3.0              # seconds per web request (web pages are slower than a port check)
 
 SEVERITY_ORDER = {"HIGH": 0, "MEDIUM": 1, "LOW": 2, "INFO": 3}
