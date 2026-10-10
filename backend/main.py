@@ -21,11 +21,16 @@ ALLOWED_ORIGINS = {
     "https://harshitapandit1.github.io",
 }
 
+RENDER_HOST = os.environ.get("RENDER_EXTERNAL_HOSTNAME", "").strip()
+
 ALLOWED_HOSTS = {
     f"{HOST}:{PORT}",
     f"localhost:{PORT}",
     "127.0.0.1:5000",
 }
+
+if RENDER_HOST:
+    ALLOWED_HOSTS.add(RENDER_HOST)
 WEB_TIMEOUT = 3.0              # seconds per web request (web pages are slower than a port check)
 
 SEVERITY_ORDER = {"HIGH": 0, "MEDIUM": 1, "LOW": 2, "INFO": 3}
