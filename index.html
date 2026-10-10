@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VulnScan — Mini Vulnerability Scanner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style id="vulnscan-css-fallback">
+html, body { margin: 0; min-width: 320px; }
+.app-layout { min-height: 100vh; }
+.topbar, .sidebar, .main, .page { box-sizing: border-box; }
+.vulnscan-shield { width: 42px; height: 50px; max-width: 42px; display: block; }
+.application-body { min-height: calc(100vh - 84px); }
+.main { min-width: 0; }
+img, svg { max-width: 100%; }
+</style>
+</head>
+<body>
+<div class="app-layout">
+
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="topbar-brand-icon">
+      <svg class="vulnscan-shield" viewBox="0 0 48 56" fill="none" aria-hidden="true">
+        <path d="M24 2L4 9V25C4 38 12.5 49.5 24 54C35.5 49.5 44 38 44 25V9L24 2Z" stroke="currentColor" stroke-width="2.8"/>
+        <path d="M24 14V36" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+        <circle cx="24" cy="41" r="1.8" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="topbar-brand-text">
+      <div class="topbar-brand-name"><span>Vuln</span>Scan</div>
+      <div class="topbar-brand-sub">Mini Vulnerability Scanner</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="tagline-pill">Stay Informed, Stay Secure</span>
+    <span class="lock-icon">🔒</span>
+  </div>
+</header>
+
+<div class="application-body">
+
+<aside class="sidebar">
+  <nav class="nav">
+    <button class="nav-item active" data-tab="dashboard" type="button"><span class="nav-icon">⌂</span><span>Dashboard</span></button>
+    <button class="nav-item" data-tab="scan" type="button"><span class="nav-icon">⌕</span><span>Scan Target</span></button>
+    <button class="nav-item" data-tab="results" type="button"><span class="nav-icon">▤</span><span>Scan Results</span></button>
+    <button class="nav-item" data-tab="reports" type="button"><span class="nav-icon">▥</span><span>Reports</span></button>
+    <button class="nav-item" data-tab="settings" type="button"><span class="nav-icon">⚙</span><span>Settings</span></button>
+    <button class="nav-item" data-tab="about" type="button"><span class="nav-icon">ⓘ</span><span>About</span></button>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="quote">"Hack the mindset,<br>not the system."</div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-version">VulnScan v1.0</div>
+    <div class="sidebar-use">Educational Use Only</div>
+  </div>
+</aside>
+
+<main class="main">
+<div class="content">
+
+<!-- ================= DASHBOARD ================= -->
+<section class="page active" data-page="dashboard">
+
+  <div class="hero">
+    <div class="hero-content">
+      <h1>Welcome to <span>VulnScan</span></h1>
+      <p>A simple yet powerful tool to detect common vulnerabilities in web applications and networks.</p>
+      <div class="hero-features">
+        <span>✓ Open Port Scanning</span>
+        <span>✓ Service &amp; Version Detection</span>
+        <span>✓ Configuration Checks</span>
+        <span>✓ Detailed Reports</span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-buttons left-buttons">
+        <button class="hero-pill" type="button">Scan</button>
+        <button class="hero-pill" type="button">Analyze</button>
+      </div>
+      <div class="hero-laptop">
+        <div class="laptop-screen">
+          <div class="screen-lines">
+            <span class="screen-line line-a"></span><span class="screen-line line-b"></span>
+            <span class="screen-line line-c"></span><span class="screen-line line-d"></span>
+          </div>
+          <div class="mini-shield"><span>✓</span></div>
+        </div>
+        <div class="laptop-base"><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+      <div class="hero-buttons right-buttons">
+        <button class="hero-pill" type="button">Detect</button>
+        <button class="hero-pill" type="button">Report</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="top-cards">
+    <div class="card scan-card">
+      <div class="card-title"><span class="card-icon pink">🎯</span><span>Start a New Scan</span></div>
+      <div class="scan-form">
+        <div class="field">
+          <label>Enter Target (IP / Domain / URL)</label>
+          <input id="targetInput" type="text" value="127.0.0.1" placeholder="127.0.0.1">
+        </div>
+        <div class="field">
+          <label>Scan Type</label>
+          <select id="scanType">
+<option>Network Scan</option>
+<option>Web Application Scan</option>
+<option>Full Scan (Network + Web)</option>
+</select>
+        </div>
+        <button class="start-button" id="startBtn" type="button">▶ Start Scan</button>
+      </div>
+      <div class="examples">Examples: 127.0.0.1 &nbsp;&nbsp; scanme.nmap.org &nbsp;&nbsp; localhost</div>
+      <div class="demo-note">Scans run live through the Python backend (<strong>python main.py</strong> must be running). Only scan targets you own or have permission to test. You can also use <strong>Load Report (JSON)</strong> to view a saved report.</div>
+    </div>
+
+    <div class="card summary-card">
+      <div class="card-title"><span class="card-icon blue">◔</span><span>Scan Summary</span></div>
+      <div class="summary-grid">
+        <div class="summary-box ports"><div class="summary-number" id="statPorts">0</div><div class="summary-label">Ports Scanned</div></div>
+        <div class="summary-box open"><div class="summary-number" id="statOpen">0</div><div class="summary-label">Open Ports</div></div>
+        <div class="summary-box findings"><div class="summary-number" id="statFindings">0</div><div class="summary-label">Findings</div></div>
+        <div class="summary-box info"><div class="summary-number" id="statInfo">0</div><div class="summary-label">Info</div></div>
+      </div>
+      <div class="summary-meta">
+        <span>Target: <strong id="metaTarget">-</strong></span>
+        <span id="metaDate">Scan Date: -</span>
+        <span>Scan Type: <strong id="metaType">-</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-column">
+    <div class="card">
+      <div class="card-title"><span class="card-icon teal">▤</span><span>Open Ports &amp; Services</span></div>
+      <div class="table-wrapper"><table>
+        <thead><tr><th>Port</th><th>Status</th><th>Service</th><th>Version</th><th>Risk</th></tr></thead>
+        <tbody id="portsTable"><tr class="empty-row"><td colspan="5">No scan run yet. Click Start Scan.</td></tr></tbody>
+      </table></div>
+    </div>
+    <div class="card findings-card">
+      <div class="card-title"><span class="card-icon orange">⚠</span><span>Vulnerability Findings</span></div>
+      <div class="table-wrapper"><table>
+        <thead><tr><th>Severity</th><th>Port</th><th>Issue</th><th>Description</th></tr></thead>
+        <tbody id="findingsTable"><tr class="empty-row"><td colspan="4">No scan run yet.</td></tr></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="two-column">
+    <div class="card">
+      <div class="card-title"><span class="card-icon purple">◉</span><span>Scan Progress</span></div>
+      <ul class="progress-list" id="progressList">
+        <li><span class="progress-dot step-dot"></span>Resolving target...</li>
+        <li><span class="progress-dot step-dot"></span>Scanning ports...</li>
+        <li><span class="progress-dot step-dot"></span>Detecting services...</li>
+        <li><span class="progress-dot step-dot"></span>Checking configurations...</li>
+        <li><span class="progress-dot step-dot"></span>Generating report...</li>
+      </ul>
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-percent" id="progressPct">0%</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-icon yellow">⚡</span><span>Quick Actions</span></div>
+      <div class="quick-actions">
+        <button class="quick-action view" id="viewReportBtn" type="button"><span class="quick-icon">▤</span><span>View Detailed Report</span></button>
+        <button class="quick-action html" id="downloadHtmlBtn" type="button"><span class="quick-icon">↓</span><span>Download Report <small>(HTML)</small></span></button>
+        <button class="quick-action json" id="loadJsonBtn" type="button"><span class="quick-icon">{}</span><span>Load Report <small>(JSON)</small></span></button>
+        <button class="quick-action reset" id="newScanBtn" type="button"><span class="quick-icon">↻</span><span>Start New Scan</span></button>
+      </div>
+      <input type="file" id="fileInput" accept="application/json" style="display:none">
+    </div>
+  </div>
+</section>
+
+<!-- ================= SCAN TARGET ================= -->
+<section class="page" data-page="scan">
+  <div class="page-heading">
+    <div>
+      <div class="page-kicker">VULNERABILITY ASSESSMENT</div>
+      <h1>Scan Target</h1>
+      <p>Configure the target and scan parameters before starting a vulnerability assessment.</p>
+    </div>
+    <div class="page-heading-icon blue-icon">⌕</div>
+  </div>
+  <div class="page-grid">
+    <div class="card">
+      <div class="card-title"><span class="card-icon blue">⌕</span>Target Configuration</div>
+      <div class="field field-large">
+        <label>Target IP / Domain / URL</label>
+        <input id="targetInput2" type="text" value="127.0.0.1" placeholder="127.0.0.1">
+        <span class="field-hint">Example: 127.0.0.1, scanme.nmap.org, localhost</span>
+      </div>
+      <div class="form-grid-3">
+        <div class="field">
+          <label>Scan Type</label>
+          <select id="scanType2">
+<option>Network Scan</option>
+<option>Web Application Scan</option>
+<option>Full Scan (Network + Web)</option>
+</select>
+        </div>
+        <div class="field"><label>Start Port</label><input id="startPort" type="number" value="1" min="1" max="65535"></div>
+        <div class="field"><label>End Port</label><input id="endPort" type="number" value="1024" min="1" max="65535"></div>
+      </div>
+      <label class="permission-row">
+        <input type="checkbox" id="permissionCheck">
+        <span>I own this target or have explicit permission to test it.</span>
+      </label>
+      <button class="primary-wide-button" id="startBtn2" type="button">▶ Start Scan</button>
+      <div class="security-note"><span>ⓘ</span><span>VulnScan is designed for authorized defensive testing and educational use.</span></div>
+    </div>
+    <div class="card configuration-card">
+      <div class="card-title"><span class="card-icon teal">◈</span>Scan Configuration</div>
+      <div class="configuration-list">
+        <div class="configuration-item"><span>Target</span><strong>Local / Remote</strong></div>
+        <div class="configuration-item"><span>Protocol</span><strong>TCP / HTTP(S)</strong></div>
+        <div class="configuration-item"><span>Port Range</span><strong>Max 2048 ports per scan</strong></div>
+        <div class="configuration-item"><span>Detection</span><strong>Service + Version</strong></div>
+        <div class="configuration-item"><span>Output</span><strong>HTML + JSON</strong></div>
+      </div>
+      <div class="mini-info-box">
+        <div class="mini-info-title">What will be checked?</div>
+        <ul>
+          <li>Open ports</li>
+          <li>Running services</li>
+          <li>Service versions</li>
+          <li>Basic misconfigurations</li>
+          <li>Web: security headers, cookies, exposed files</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= RESULTS ================= -->
+<section class="page" data-page="results">
+  <div class="page-heading">
+    <div>
+      <div class="page-kicker">ANALYSIS</div>
+      <h1>Scan Results</h1>
+      <p>Review the ports, services and vulnerability findings detected during the latest scan.</p>
+    </div>
+    <div class="page-heading-icon teal-icon">▤</div>
+  </div>
+  <div class="result-overview">
+    <div class="result-overview-item"><span>Target</span><strong id="resultsTarget">-</strong></div>
+    <div class="result-overview-item"><span>Scan Type</span><strong id="resultsType">-</strong></div>
+    <div class="result-overview-item"><span>Ports Scanned</span><strong id="resultsPorts">0</strong></div>
+    <div class="result-overview-item"><span>Findings</span><strong class="danger-text" id="resultsFindings">0</strong></div>
+  </div>
+  <div class="two-column results-columns">
+    <div class="card">
+      <div class="card-title"><span class="card-icon teal">▤</span>Open Ports &amp; Services</div>
+      <div class="table-wrapper"><table>
+        <thead><tr><th>Port</th><th>Status</th><th>Service</th><th>Version</th><th>Risk</th></tr></thead>
+        <tbody id="portsTable2"><tr class="empty-row"><td colspan="5">No scan run yet.</td></tr></tbody>
+      </table></div>
+    </div>
+    <div class="card findings-card">
+      <div class="card-title"><span class="card-icon orange">⚠</span>Vulnerability Findings</div>
+      <div class="table-wrapper"><table>
+        <thead><tr><th>Severity</th><th>Port</th><th>Issue</th><th>Description</th></tr></thead>
+        <tbody id="findingsTable2"><tr class="empty-row"><td colspan="4">No scan run yet.</td></tr></tbody>
+      </table></div>
+    </div>
+  </div>
+  <div class="card result-guidance">
+    <div class="card-title"><span class="card-icon blue">i</span>Result Interpretation</div>
+    <div class="guidance-grid">
+      <div><strong>High</strong><p>Requires prompt attention because the detected condition may expose a service or sensitive resource.</p></div>
+      <div><strong>Medium</strong><p>Represents a security weakness that should be reviewed and corrected where applicable.</p></div>
+      <div><strong>Low</strong><p>Lower-risk configuration or exposure that should still be documented.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= REPORTS ================= -->
+<section class="page" data-page="reports">
+  <div class="page-heading">
+    <div>
+      <div class="page-kicker">DOCUMENTATION</div>
+      <h1>Reports</h1>
+      <p>View and export reports generated from your latest VulnScan assessment.</p>
+    </div>
+    <div class="page-heading-icon purple-icon">▥</div>
+  </div>
+  <div class="reports-grid">
+    <div class="report-card report-html">
+      <div class="report-card-top"><div class="report-file-icon">&lt;/&gt;</div><span class="badge info">HTML</span></div>
+      <h3>scan_report.html</h3>
+      <p>A browser-friendly vulnerability assessment report containing scan details, services, findings and recommendations.</p>
+      <div class="report-meta"><span>Target</span><strong id="reportsTarget1">-</strong></div>
+      <button class="report-button blue-report" id="dlHtmlRow" type="button">↓ Download HTML Report</button>
+    </div>
+    <div class="report-card report-json">
+      <div class="report-card-top"><div class="report-file-icon">{}</div><span class="badge info">JSON</span></div>
+      <h3>scan_report.json</h3>
+      <p>Structured report data suitable for importing, processing or using with other security tools.</p>
+      <div class="report-meta"><span>Target</span><strong id="reportsTarget2">-</strong></div>
+      <button class="report-button purple-report" id="dlJsonRow" type="button">↓ Download JSON Report</button>
+    </div>
+  </div>
+  <div class="card report-history-card">
+    <div class="card-title"><span class="card-icon blue">◷</span>Report Information</div>
+    <div class="report-info-grid">
+      <div><span>Latest Target</span><strong id="infoTarget">-</strong></div>
+      <div><span>Scan Type</span><strong id="infoType">-</strong></div>
+      <div><span>Ports Scanned</span><strong id="infoPorts">0</strong></div>
+      <div><span>Findings</span><strong class="danger-text" id="infoFindings">0</strong></div>
+    </div>
+    <div class="note">Reports reflect the most recent scan run in this session. Run a new scan from the Scan Target page to update the results.</div>
+  </div>
+</section>
+
+<!-- ================= SETTINGS ================= -->
+<section class="page" data-page="settings">
+  <div class="page-heading">
+    <div>
+      <div class="page-kicker">CONFIGURATION</div>
+      <h1>Settings</h1>
+      <p>Configure the default scanning parameters used by VulnScan.</p>
+    </div>
+    <div class="page-heading-icon blue-icon">⚙</div>
+  </div>
+  <div class="settings-layout">
+    <div class="card">
+      <div class="card-title"><span class="card-icon blue">⚙</span>Scanner Settings</div>
+      <div class="settings-section">
+        <div class="settings-section-title">Port Scanning</div>
+        <div class="form-grid-2">
+          <div class="field"><label>Default Start Port</label><input id="settingStartPort" type="number" value="1"></div>
+          <div class="field"><label>Default End Port</label><input id="settingEndPort" type="number" value="1024"></div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title">Connection</div>
+        <div class="form-grid-2">
+          <div class="field">
+            <label>Connection Timeout</label>
+            <input id="settingTimeout" type="number" value="0.6" step="0.1">
+            <span class="field-hint">Timeout value in seconds.</span>
+          </div>
+        </div>
+      </div>
+      <button class="primary-button" id="saveSettingsBtn" type="button">Save Settings</button>
+      <div class="settings-saved" id="settingsSavedNote">✓ Settings saved.</div>
+    </div>
+    <div class="card settings-side-card">
+      <div class="card-title"><span class="card-icon teal">◈</span>Current Configuration</div>
+      <div class="configuration-list">
+        <div class="configuration-item"><span>Scan Engine</span><strong>Python</strong></div>
+        <div class="configuration-item"><span>Protocol</span><strong>TCP / HTTP(S)</strong></div>
+        <div class="configuration-item"><span>Detection</span><strong>Service + Version</strong></div>
+        <div class="configuration-item"><span>Output Formats</span><strong>HTML / JSON</strong></div>
+      </div>
+      <div class="mini-info-box">
+        <div class="mini-info-title">Important</div>
+        <p>These settings are intended for the educational scanner configuration. Always verify the target and authorization before performing a scan.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section class="page" data-page="about">
+  <div class="page-heading">
+    <div>
+      <div class="page-kicker">INFORMATION</div>
+      <h1>About VulnScan</h1>
+      <p>Learn about the purpose, scope and technology behind the project.</p>
+    </div>
+    <div class="page-heading-icon yellow-icon">i</div>
+  </div>
+  <div class="about-layout">
+    <div class="card about-main-card">
+      <div class="about-logo">
+        <div class="about-shield">✓</div>
+        <div>
+          <div class="about-brand">Vuln<span>Scan</span></div>
+          <div class="about-brand-sub">Mini Vulnerability Scanner</div>
+        </div>
+      </div>
+      <h2>Educational Vulnerability Assessment</h2>
+      <p class="about-description">VulnScan is an educational, defensive vulnerability assessment tool designed to demonstrate the basic workflow of vulnerability scanning.</p>
+      <p class="about-description">It scans a target for open ports, attempts to identify running services, checks a small set of well-known security misconfigurations and produces a clear report without attempting to exploit the target.</p>
+      <div class="about-warning"><span>⚠</span><p>Only scan systems that you own or have explicit permission to test.</p></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-icon blue">◫</span>Project Details</div>
+      <div class="project-details">
+        <div><span>Version</span><strong>1.0</strong></div>
+        <div><span>Backend</span><strong>Python 3</strong></div>
+        <div><span>Networking</span><strong>Socket</strong></div>
+        <div><span>Scan Types</span><strong>Network / Web / Full</strong></div>
+      </div>
+    </div>
+  </div>
+  <div class="card about-features-card">
+    <div class="card-title"><span class="card-icon teal">✓</span>What VulnScan Checks</div>
+    <div class="about-feature-grid">
+      <div class="about-feature"><span>01</span><div><strong>Open Ports</strong><p>Identifies accessible TCP ports on the selected target.</p></div></div>
+      <div class="about-feature"><span>02</span><div><strong>Services</strong><p>Attempts to identify services and their detected versions.</p></div></div>
+      <div class="about-feature"><span>03</span><div><strong>Configuration</strong><p>Checks selected common security misconfigurations.</p></div></div>
+      <div class="about-feature"><span>04</span><div><strong>Reports</strong><p>Presents findings in readable HTML and structured JSON formats.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>VulnScan v1.0</span>
+  <span>Educational Use Only</span>
+  <span>Built for Learning • Stay Secure</span>
+</footer>
+
+</div>
+</main>
+</div>
+</div>
+
+<!-- Real scanner logic lives in js/app.js (calls the Python backend) -->
+<script src="js/app.js"></script>
+
+<!-- Keeps the Results and Reports pages in sync after each scan -->
+<script>
+(function () {
+  var original = window.renderReport;
+  if (typeof original !== 'function') return;
+  window.renderReport = function (report) {
+    original(report);
+    var set = function (id, value) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = value;
+    };
+    var ports = report.ports_scanned || 0;
+    var count = (report.findings || []).length;
+    set('resultsTarget', report.target || '-');
+    set('resultsType', report.scan_type || '-');
+    set('resultsPorts', ports);
+    set('resultsFindings', count);
+    set('infoTarget', report.target || '-');
+    set('infoType', report.scan_type || '-');
+    set('infoPorts', ports);
+    set('infoFindings', count);
+  };
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+{
+    "target": "scanme.nmap.org",
+    "scan_type": "Full Scan (Network + Web)",
+    "ports_scanned": 1024,
+    "open_ports": [
+        {
+            "port": 22,
+            "service_name": "SSH",
+            "version": "OpenSSH 6.6.1p1"
+        },
+        {
+            "port": 80,
+            "service_name": "HTTP",
+            "version": "Apache/2.4.7 (Ubuntu)"
+        }
+    ],
+    "findings": [
+        {
+            "severity": "MEDIUM",
+            "port": 22,
+            "title": "Outdated OpenSSH",
+            "description": "Detected: OpenSSH 6.6.1p1. This OpenSSH version is old and has known vulnerabilities. Fix: Upgrade to a supported, patched version."
+        },
+        {
+            "severity": "MEDIUM",
+            "port": 80,
+            "title": "Outdated Apache 2.4.x",
+            "description": "Detected: Apache/2.4.7 (Ubuntu). This Apache release is older than 2.4.49 and is missing many later security fixes. Fix: Upgrade to a supported, patched version."
+        },
+        {
+            "severity": "MEDIUM",
+            "port": 80,
+            "title": "HTTP without HTTPS",
+            "description": "Port 80 is open but 443 is not, so traffic is unencrypted. Fix: Enable HTTPS and redirect HTTP to it."
+        },
+        {
+            "severity": "MEDIUM",
+            "port": 80,
+            "title": "Missing header: Content-Security-Policy",
+            "description": "No CSP, so injected scripts are not restricted by the browser. Fix: Add a Content-Security-Policy header."
+        },
+        {
+            "severity": "LOW",
+            "port": 80,
+            "title": "Missing header: X-Frame-Options",
+            "description": "The page can be embedded in other sites (clickjacking). Fix: Add X-Frame-Options: DENY or SAMEORIGIN."
+        },
+        {
+            "severity": "LOW",
+            "port": 80,
+            "title": "Missing header: X-Content-Type-Options",
+            "description": "Browsers may guess content types (MIME sniffing). Fix: Add X-Content-Type-Options: nosniff."
+        },
+        {
+            "severity": "LOW",
+            "port": 80,
+            "title": "Missing header: Referrer-Policy",
+            "description": "Full URLs may leak to other sites in the Referer header. Fix: Add a Referrer-Policy header."
+        },
+        {
+            "severity": "INFO",
+            "port": 22,
+            "title": "Software version disclosed",
+            "description": "The service reveals its version (OpenSSH 6.6.1p1), which helps attackers pick exploits. Fix: Hide or minimise version banners."
+        },
+        {
+            "severity": "INFO",
+            "port": 80,
+            "title": "Software version disclosed",
+            "description": "The service reveals its version (Apache/2.4.7 (Ubuntu)), which helps attackers pick exploits. Fix: Hide or minimise version banners."
+        }
+    ],
+    "summary": {
+        "severity_counts": {
+            "HIGH": 0,
+            "MEDIUM": 4,
+            "LOW": 3,
+            "INFO": 2
+        }
+    },
+    "scan_date": "8/10/2026, 2:30:57 pm"
+}
