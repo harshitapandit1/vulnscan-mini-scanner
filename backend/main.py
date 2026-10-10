@@ -1,13 +1,14 @@
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
+import os
 from urllib.parse import urlparse
 from port_scanner import scan_ports
 from service_detector import detect_service
 from vulnerability_checker import check_vulnerabilities
 from web_checker import check_web
 
-HOST = "127.0.0.1"
-PORT = 5000
+HOST = "0.0.0.0"
+PORT = int(os.environ.get("PORT", 5000))
 
 MAX_PORT_RANGE = 2048          # keep in sync with app.js
 DEFAULT_TIMEOUT = 0.6          # seconds per port
